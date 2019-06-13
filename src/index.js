@@ -1,5 +1,2 @@
-const util = () => {
-	return 'util'
-}
-
-module.exports = util
+export * from '../fn'
+export * from '../array'

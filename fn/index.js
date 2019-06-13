@@ -1,5 +1,4 @@
 const mingo = require('mingo')
-const {reduceAsync} = require('../array')
 
 const _test = (criteria, ...args) => {
   if (typeof criteria === 'object') {
@@ -12,49 +11,40 @@ const _test = (criteria, ...args) => {
   }
 }
 
+const _fnApply = (fnSpec, ...args) => {
+  return typeof fnSpec === 'function' ? fnSpec(...args) : fnSpec.fn(...args)
+}
+
 const applyMatching = (fnSpecList, ...args) => {
   const matching = fnSpecList.find(fnSpec => {
     return _test(fnSpec.criteria, ...args)
   })
 
   if (matching) {
-    return typeof matching === 'function' ?
-      matching(...args) : matching.fn(...args)
+    return _fnApply(matching, ...args)
   } else {
     throw new Error('No matching spec')
   }
 }
 
-const applyMatchingAll = (fnSpecList, ...args) => {
-  return fnSpecList
-    .filter(fnSpec => {
-      return _test(fnSpec.criteria, ...args)
-    })
-    .map(fnSpec => {
-      return typeof matching === 'function' ? fnSpec(...args) : fnSpec.fn(...args)
-    })
+const applyMatchingReduce = (fnSpecList, arg, injectArgs = []) => {
+  return fnSpecList.reduce((acc, fnSpec) => {
+    return _test(fnSpec.criteria, acc) ? _fnApply(fnSpec, acc, ...injectArgs) : acc
+  }, arg)
 }
 
-// const applySequence = fns => {
-//   return reduceAsync(fns, (acc, fn) => {
-//     return fn(acc)
-//   })
-// }
-
-// const applyMatchingSequence = (fnSpecList, criteria) => {
-//   const query = new mingo.Query(criteria)
-
-//   const matching = fnSpecList.filter(fnSpec => {
-//     return typeof fnSpec.criteria === 'function' ?
-//       fnSpec.criteria() : query.test(criteria)
-//   })
-
-//   return reduceAsync(matching, (acc, fnSpec) => {
-//     return fnSpec.fn(acc)
-//   })
-// }
+const applyMatchingReduceAsync = (fnSpecList, arg, injectArgs = []) => {
+  return fnSpecList.reduce((previous, fnSpec) => {
+    return previous.then(res => {
+      return _test(fnSpec.criteria, res) ?
+        Promise.resolve(_fnApply(fnSpec, res, ...injectArgs)) :
+        Promise.resolve(res)
+    })
+  }, Promise.resolve(arg))
+}
 
 module.exports = {
   applyMatching,
-  applyMatchingAll
+  applyMatchingReduce,
+  applyMatchingReduceAsync,
 }

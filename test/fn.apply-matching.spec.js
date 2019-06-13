@@ -1,6 +1,5 @@
 const {
-  applyMatching,
-  applyMatchingAll
+  applyMatching
 } = require('../fn')
 
 describe('applyMatching(fnSpecs, ...args)', () => {
@@ -189,47 +188,5 @@ describe('applyMatching(fnSpecs, ...args)', () => {
       .toEqual('11 <= 12 <= 20')
 
     })
-  })
-})
-
-describe('applyMatchingAll(fnSpecs, ...args)', () => {
-  test('Should apply all matching specs', () => {
-    const FN_SPECS = [
-      {
-        criteria: { type: 'text' },
-        fn: ({ value }) => {
-          return `${value} -- is a text`
-        }
-      },
-      {
-        criteria: { type: 'text' },
-        fn: ({ value }) => {
-          return `Hello: ${value}`
-        }
-      },
-      {
-        criteria: { type: 'number' },
-        fn: ({ value }) => {
-          return `${value} -- is a number`
-        }
-      },
-    ]
-
-    expect(applyMatchingAll(FN_SPECS, {
-      type: 'text',
-      value: 'World'
-    }))
-    .toEqual([
-      'World -- is a text',
-      'Hello: World'
-    ])
-
-    expect(applyMatchingAll(FN_SPECS, {
-      type: 'number',
-      value: 600
-    }))
-    .toEqual([
-      '600 -- is a number'
-    ])
   })
 })
