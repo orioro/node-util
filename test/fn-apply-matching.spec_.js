@@ -1,8 +1,8 @@
-const {
-  applyMatching
-} = require('../fn')
+import {
+  fnApplyMatching
+} from '../src'
 
-describe('applyMatching(fnSpecs, ...args)', () => {
+describe('fnApplyMatching(fnSpecs, ...args)', () => {
   describe('Should test each fn spec\'s criteria with the arguments and apply the FIRST MATCHING spec', () => {
     test('Using mingo queries as criteria', () => {
       const FN_SPECS = [
@@ -46,19 +46,19 @@ describe('applyMatching(fnSpecs, ...args)', () => {
         }
       ]
 
-      expect(applyMatching(FN_SPECS, {
+      expect(fnApplyMatching(FN_SPECS, {
         format: 'date',
         value: '2018-10-10'
       }))
       .toEqual('2018-10-10--format-date')
 
-      expect(applyMatching(FN_SPECS, {
+      expect(fnApplyMatching(FN_SPECS, {
         format: 'number',
         value: 10
       }))
       .toEqual('10--format-number')
 
-      expect(applyMatching(FN_SPECS, {
+      expect(fnApplyMatching(FN_SPECS, {
         format: 'unspecified',
         value: 12
       }))
@@ -95,11 +95,11 @@ describe('applyMatching(fnSpecs, ...args)', () => {
         }
       ]
 
-      expect(applyMatching(FN_SPECS, 15))
+      expect(fnApplyMatching(FN_SPECS, 15))
         .toEqual('"15" is higher than 11, lower than 20')
-      expect(applyMatching(FN_SPECS, 22))
+      expect(fnApplyMatching(FN_SPECS, 22))
         .toEqual('"22" is higher than 21, lower than 30')
-      expect(applyMatching(FN_SPECS, 'Some string'))
+      expect(fnApplyMatching(FN_SPECS, 'Some string'))
         .toEqual('"Some string" is a string')
     })
 
@@ -116,7 +116,7 @@ describe('applyMatching(fnSpecs, ...args)', () => {
       ]
 
       expect(() => {
-        applyMatching(FN_SPECS, { format: 'other-format' })
+        fnApplyMatching(FN_SPECS, { format: 'other-format' })
       }).toThrow('No matching spec')
     })
 
@@ -148,7 +148,7 @@ describe('applyMatching(fnSpecs, ...args)', () => {
         },
       ]
 
-      expect(applyMatching(FN_SPECS, {
+      expect(fnApplyMatching(FN_SPECS, {
         type: 'number',
         value: 25,
         other_properties: ['some', 'other', 'prop'],
@@ -182,7 +182,7 @@ describe('applyMatching(fnSpecs, ...args)', () => {
         },
       ]
 
-      expect(applyMatching(FN_SPECS, {
+      expect(fnApplyMatching(FN_SPECS, {
         customAttributes: { value: 12 }
       }))
       .toEqual('11 <= 12 <= 20')

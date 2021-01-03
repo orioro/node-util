@@ -1,8 +1,8 @@
-const {
-  applyMatchingReduceAsync
-} = require('../fn')
+import {
+  fnApplyMatchingReduceAsync
+} from '../src'
 
-describe('applyMatchingReduceAsync(fnSpecs, arg)', () => {
+describe('fnApplyMatchingReduceAsync(fnSpecs, arg)', () => {
   const delay = (response, timeout) => {
     return new Promise(resolve => {
       setTimeout(resolve.bind(null, response), timeout)
@@ -45,7 +45,7 @@ describe('applyMatchingReduceAsync(fnSpecs, arg)', () => {
 
     return Promise.all([
       // Both changes
-      expect(applyMatchingReduceAsync(FN_SPECS, {
+      expect(fnApplyMatchingReduceAsync(FN_SPECS, {
         type: 'text',
         required: true,
         value: 'Hello World'
@@ -62,7 +62,7 @@ describe('applyMatchingReduceAsync(fnSpecs, arg)', () => {
       }),
 
       // Only second
-      expect(applyMatchingReduceAsync(FN_SPECS, {
+      expect(fnApplyMatchingReduceAsync(FN_SPECS, {
         type: 'text',
         required: false,
         value: 'Hello World'
@@ -76,7 +76,7 @@ describe('applyMatchingReduceAsync(fnSpecs, arg)', () => {
       }),
 
       // No changes
-      expect(applyMatchingReduceAsync(FN_SPECS, {
+      expect(fnApplyMatchingReduceAsync(FN_SPECS, {
         type: 'number',
         required: false,
         value: 30

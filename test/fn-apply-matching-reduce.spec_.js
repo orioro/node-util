@@ -1,8 +1,8 @@
-const {
-  applyMatchingReduce
-} = require('../fn')
+import {
+  fnApplyMatchingReduce
+} from '../src'
 
-describe('applyMatchingReduce(fnSpecs, arg)', () => {
+describe('fnApplyMatchingReduce(fnSpecs, arg)', () => {
   test('Should apply matching specs in sequence', () => {
     const FN_SPECS = [
       {
@@ -36,7 +36,7 @@ describe('applyMatchingReduce(fnSpecs, arg)', () => {
     ]
 
     // Both changes
-    expect(applyMatchingReduce(FN_SPECS, {
+    expect(fnApplyMatchingReduce(FN_SPECS, {
       type: 'text',
       required: true,
       value: 'Hello World'
@@ -53,7 +53,7 @@ describe('applyMatchingReduce(fnSpecs, arg)', () => {
     })
 
     // Only second
-    expect(applyMatchingReduce(FN_SPECS, {
+    expect(fnApplyMatchingReduce(FN_SPECS, {
       type: 'text',
       required: false,
       value: 'Hello World'
@@ -67,7 +67,7 @@ describe('applyMatchingReduce(fnSpecs, arg)', () => {
     })
 
     // No changes
-    expect(applyMatchingReduce(FN_SPECS, {
+    expect(fnApplyMatchingReduce(FN_SPECS, {
       type: 'number',
       required: false,
       value: 30
